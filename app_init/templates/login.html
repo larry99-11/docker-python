@@ -1,0 +1,21 @@
+{%extends 'base.html'%}
+{%block title%}Login page{%endblock%}
+{%block content%} 
+<form method="POST">
+    <h3 align="center">Login</h3>
+    <!--User enters login credentials--->
+    <div class="form-group">
+        <label for="username">username</label>
+        <input type="text" id="username" name="username" class="form-controller" placeholder="Enter Username"/>
+        
+        <label for="password">password</label>
+        <input type="password" id="password" name="password" class="form-controller" placeholder="Enter password"/>
+
+        <br/>
+        <div align="center">
+            <button class="btn btn-primary" type="submit">Login</button>
+        </div>
+
+    </div>
+</form>
+{%endblock%}
