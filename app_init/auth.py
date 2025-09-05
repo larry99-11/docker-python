@@ -1,7 +1,7 @@
 import re
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from app_init import database as db
-from models_db import User
+from .db_instance import database as db
+from .models_db import User
 
 #current user variable from 'flask login' allows us to access this variable once loged in and get the: username, password, email of the loggedin user
 from flask_login import login_user, logout_user, login_required, current_user
@@ -30,15 +30,16 @@ def login_page():
                 login_user(user,remember=True)
             else:
                 flash('Password inorrect!', category='error')
-                return redirect(url_for('view.home'))
+                return redirect(url_for('views.home'))
         else:
             flash('Email does\'t exist!', category='error')
-        return render_template("login.html")
+    
+    return render_template("login.html")
 
 @auth.route("/sign-up", methods=['GET','POST'])
 def signup_page():
 
-    EMAIL_ADDR_REGEX= re.compile('^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+    EMAIL_ADDR_REGEX = re.compile(r'^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$')
 
     if  request.method =='POST':
 

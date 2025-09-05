@@ -1,4 +1,4 @@
-from app_init import database as db
+from .db_instance import database as db
 from flask_login import UserMixin
 from sqlalchemy.sql import func 
 
