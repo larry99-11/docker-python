@@ -1,8 +1,10 @@
-
+import re
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from app_init import database as db
 from models_db import User
-from flask_login import login_user, logout_user, login_required
+
+#current user variable from 'flask login' allows us to access this variable once loged in and get the: username, password, email of the loggedin user
+from flask_login import login_user, logout_user, login_required, current_user
 
 #need to hash passwords so its not stored in clear text
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -12,13 +14,31 @@ auth = Blueprint('auth', __name__)
 
 @auth.route("/login", methods=['GET','POST'])
 def login_page():
-    username = request.form.get("username")
-    password = request.form.get("password")
 
-    return render_template("login.html")
+    if request.method == 'POST':
+
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+        user = User.query.filter_by(email=email).first()
+
+        # if the user exists we are going to check the hash the password aginst the user input pasword
+        if user:
+            if check_password_hash(user.password, password):
+                flash('Logged in!', category='success')
+                # using flask login method
+                login_user(user,remember=True)
+            else:
+                flash('Password inorrect!', category='error')
+                return redirect(url_for('view.home'))
+        else:
+            flash('Email does\'t exist!', category='error')
+        return render_template("login.html")
 
 @auth.route("/sign-up", methods=['GET','POST'])
 def signup_page():
+
+    EMAIL_ADDR_REGEX= re.compile('^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
 
     if  request.method =='POST':
 
@@ -45,17 +65,18 @@ def signup_page():
             flash('Password is too short!', category='error')
         
         #NOTE: write some regex to verify the email
-        elif re.match(email_address):
+        elif not re.match(EMAIL_ADDR_REGEX, email_address):
             flash('Email format incorrect!', category='error')
         
         else:
-            # if all the checks are valid create the new user account
-            new_user = User(email=email_address, username=username, password=password)
+            # if all the checks are valid create the new user account, also hashing the password so it not in clear text
+            new_user = User(email=email_address, username=username, password=generate_password_hash(password, method='sha256'))
 
             # send user to the database
             db.session.add(new_user)
             # this line acutually puts it into the database
             db.session.commit()
+            login_user(new_user,remember=True)
 
             flash('User sucessfully created!')
             return redirect(url_for('views.home'))
@@ -65,5 +86,8 @@ def signup_page():
 
 # just redirect the user to a diffrent endpoint i.e our home function in views.py
 @auth.route("/sign-out")
+@login_required # this decorator only allows users to access the page only if you are logged in 
 def signout_page():
+
+    logout_user()
     return redirect(url_for("views.home"))
