@@ -4,7 +4,7 @@ FROM python:3.11-slim AS builder
 
 # Install build tools necessary for packages with C extensions (like psycopg2, greenlet).
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends build-essential && \
+    apt-get install -y --no-install-recommends build-essential libpq-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -23,6 +23,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # This is the final, production-ready image. It is based on a clean, minimal image.
 FROM python:3.11-slim
 
+# Install the PostgreSQL client library required at runtime.
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libpq5 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+    
 # Set the working directory for the final stage
 WORKDIR /app
 

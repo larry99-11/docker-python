@@ -35,7 +35,7 @@ def login_page():
         else:
             flash('Email does\'t exist!', category='error')
     
-    return render_template("login.html")
+    return render_template("login.html", user=current_user) # this will pass in the current logged in user
 
 @auth.route("/sign-up", methods=['GET','POST'])
 def signup_page():
@@ -81,8 +81,7 @@ def signup_page():
             flash('User successfully created!')
             return redirect(url_for('views.home_page'))
 
-        print(email_address)
-    return render_template("signup.html")
+    return render_template("signup.html", user=current_user)
 
 # just redirect the user to a diffrent endpoint i.e our home function in views.py
 @auth.route("/sign-out")
