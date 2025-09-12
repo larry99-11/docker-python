@@ -18,6 +18,8 @@ KEY = os.getenv('SECRET_KEY')
 
 print(f'our port num is: {DB_PORT}')
 print('just testing if this works!')
+print('just testing if this works again!')
+
 def create_app():
     
     app = Flask(__name__)
