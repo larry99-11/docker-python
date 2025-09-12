@@ -16,7 +16,7 @@ DB_PORT = os.getenv('DB_PORT')
 DB_NAME = os.getenv('DB_NAME')
 KEY = os.getenv('SECRET_KEY')
 
-
+print(f'our port num is: {DB_PORT}')
 def create_app():
     
     app = Flask(__name__)
