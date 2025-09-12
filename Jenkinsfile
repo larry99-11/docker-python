@@ -20,7 +20,7 @@ pipeline {
             steps {
                 // This script block runs shell commands directly on the Jenkins agent
                 // (in my case, the Raspberry Pi).
-                sh 'docker compose -f docker-compose.prod.yml up -d --build --force-recreate'
+                sh 'docker compose -f docker-compose.yml up -d --build --force-recreate'
             }
         }
     }
