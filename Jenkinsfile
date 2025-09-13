@@ -25,10 +25,11 @@ pipeline {
                     string(credentialsId: 'DB_USER_ID', variable: 'DB_USER'),
                     string(credentialsId: 'DB_PASS_ID', variable: 'DB_PASS'),
                     string(credentialsId: 'DB_NAME_ID', variable: 'DB_NAME')
-                ])
+                ]){
                 // This script block runs shell commands directly on the Jenkins agent
                 // (in my case, the Raspberry Pi).
                 sh 'docker compose -f docker-compose.yml up -d --build --force-recreate'
+                }
             }
         }
     }
