@@ -16,9 +16,6 @@ DB_PORT = os.getenv('DB_PORT')
 DB_NAME = os.getenv('DB_NAME')
 KEY = os.getenv('SECRET_KEY')
 
-print(f'our port num is: {DB_PORT}')
-print('just testing if this works!')
-print('just testing if this works again!')
 
 def create_app():
     
