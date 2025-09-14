@@ -1,0 +1,30 @@
+# Download the ARM-specific Filebeat package
+wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.x.x-arm.deb
+# Install the package
+sudo apt -i filebeat-8.x.x-arm.deb
+
+# configure Filebeat with your ELK cluster
+
+
+# run filebeat
+
+# Check the configuration file for errors
+sudo filebeat test config
+# Test the connection to Elasticsearch
+sudo filebeat test output
+# Run Filebeat in the foreground to see logs and errors in real-time
+sudo filebeat -e
+
+### Step 4: Enable Filebeat as a System Service
+
+For production use, you'll want to run Filebeat as a background service so it starts automatically on boot.
+
+```bash
+# Enable the Filebeat service
+sudo systemctl enable filebeat
+# Start the Filebeat service
+sudo systemctl start filebeat
+
+With these steps, your Raspberry Pi will be successfully configured as a log shipper, sending all the defined logs to your central Elasticsearch cluster for analysis and visualization.
+
+
